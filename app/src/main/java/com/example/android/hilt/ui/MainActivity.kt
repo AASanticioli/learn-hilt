@@ -17,6 +17,7 @@
 package com.example.android.hilt.ui
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.hilt.LogApplication
 import com.example.android.hilt.R
@@ -35,7 +36,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupNavigation(savedInstanceState)
+        setupBackPressListener()
+    }
 
+
+    private fun setupNavigation(savedInstanceState: Bundle?) {
         navigator = (applicationContext as LogApplication).serviceLocator.provideNavigator(this)
 
         if (savedInstanceState == null) {
@@ -43,11 +49,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            finish()
-        }
+    private fun setupBackPressListener() {
+        onBackPressedDispatcher.addCallback(
+            /* owner = */ this,
+            /* onBackPressedCallback = */
+            object : OnBackPressedCallback(/* enabled = */ true) {
+                override fun handleOnBackPressed() {
+                    if (supportFragmentManager.backStackEntryCount == 0) {
+                        finish()
+                    }
+                }
+            },
+        )
     }
+
 }
