@@ -57,9 +57,10 @@ class MainActivity : AppCompatActivity() {
             /* onBackPressedCallback = */
             object : OnBackPressedCallback(/* enabled = */ true) {
                 override fun handleOnBackPressed() {
-                    Toast.makeText(this@MainActivity, "back pressed", Toast.LENGTH_SHORT).show()
                     if (supportFragmentManager.backStackEntryCount == 0) {
                         finish()
+                    } else {
+                        navigator.navigateTo(Screens.BUTTONS)
                     }
                 }
             },
